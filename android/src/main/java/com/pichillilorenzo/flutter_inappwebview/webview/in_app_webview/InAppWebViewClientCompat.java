@@ -57,6 +57,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
+
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+
+import java.net.URISyntaxException;
+
 public class InAppWebViewClientCompat extends WebViewClientCompat {
 
   protected static final String LOG_TAG = "IAWebViewClientCompat";
