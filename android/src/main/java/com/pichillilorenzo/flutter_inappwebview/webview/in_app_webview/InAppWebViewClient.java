@@ -122,7 +122,7 @@ public class InAppWebViewClient extends WebViewClient {
                     intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
                     if (intent != null) {
                         //앱실행
-                        webview.getContext().startActivity(intent);
+                        webView.getContext().startActivity(intent);
                     }
                 } catch (URISyntaxException e) {
 					//URI 문법 오류 시 처리 구간
@@ -131,7 +131,7 @@ public class InAppWebViewClient extends WebViewClient {
                     String packageName = intent.getPackage();
                     if (!packageName.equals("")) {
                         // 앱이 설치되어 있지 않을 경우 구글마켓 이동
-                        webview.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+                        webView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
                     }
                 }
 				//return  값을 반드시 true로 해야 합니다.
@@ -143,7 +143,7 @@ public class InAppWebViewClient extends WebViewClient {
                 String packageName = uri.getQueryParameter("id");
                 if (packageName != null && !packageName.equals("")) {
                     // 구글마켓 이동
-                    webview.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+                    webView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
                 }
 				//return  값을 반드시 true로 해야 합니다.
                 return true;
