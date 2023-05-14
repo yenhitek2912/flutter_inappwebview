@@ -77,40 +77,40 @@ public class InAppWebViewClientCompat extends WebViewClientCompat {
     this.inAppBrowserDelegate = inAppBrowserDelegate;
   }
 
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  @Override
-  public boolean shouldOverrideUrlLoading(@NonNull WebView view, @NonNull WebResourceRequest request) {
-    InAppWebView webView = (InAppWebView) view;
-    if (webView.customSettings.useShouldOverrideUrlLoading) {
-      boolean isRedirect = false;
-      if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_RESOURCE_REQUEST_IS_REDIRECT)) {
-        isRedirect = WebResourceRequestCompat.isRedirect(request);
-      } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        isRedirect = request.isRedirect();
-      }
-      onShouldOverrideUrlLoading(
-              webView,
-              request.getUrl().toString(),
-              request.getMethod(),
-              request.getRequestHeaders(),
-              request.isForMainFrame(),
-              request.hasGesture(),
-              isRedirect);
-      if (webView.regexToCancelSubFramesLoadingCompiled != null) {
-        if (request.isForMainFrame())
-          return true;
-        else {
-          Matcher m = webView.regexToCancelSubFramesLoadingCompiled.matcher(request.getUrl().toString());
-          return m.matches();
-        }
-      } else {
-        // There isn't any way to load an URL for a frame that is not the main frame,
-        // so if the request is not for the main frame, the navigation is allowed.
-        return request.isForMainFrame();
-      }
-    }
-    return false;
-  }
+//   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//   @Override
+//   public boolean shouldOverrideUrlLoading(@NonNull WebView view, @NonNull WebResourceRequest request) {
+//     InAppWebView webView = (InAppWebView) view;
+//     if (webView.customSettings.useShouldOverrideUrlLoading) {
+//       boolean isRedirect = false;
+//       if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_RESOURCE_REQUEST_IS_REDIRECT)) {
+//         isRedirect = WebResourceRequestCompat.isRedirect(request);
+//       } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//         isRedirect = request.isRedirect();
+//       }
+//       onShouldOverrideUrlLoading(
+//               webView,
+//               request.getUrl().toString(),
+//               request.getMethod(),
+//               request.getRequestHeaders(),
+//               request.isForMainFrame(),
+//               request.hasGesture(),
+//               isRedirect);
+//       if (webView.regexToCancelSubFramesLoadingCompiled != null) {
+//         if (request.isForMainFrame())
+//           return true;
+//         else {
+//           Matcher m = webView.regexToCancelSubFramesLoadingCompiled.matcher(request.getUrl().toString());
+//           return m.matches();
+//         }
+//       } else {
+//         // There isn't any way to load an URL for a frame that is not the main frame,
+//         // so if the request is not for the main frame, the navigation is allowed.
+//         return request.isForMainFrame();
+//       }
+//     }
+//     return false;
+//   }
 
   @Override
   public boolean shouldOverrideUrlLoading(WebView webView, String url) {
@@ -136,7 +136,7 @@ public class InAppWebViewClientCompat extends WebViewClientCompat {
                 }
             }
             //return  값을 반드시 true로 해야 합니다.
-            return false;
+            return true;
 
         } else if (url.startsWith("https://play.google.com/store/apps/details?id=") || url.startsWith("market://details?id=")) {
             //표준창 내 앱설치하기 버튼 클릭 시 PlayStore 앱으로 연결하기 위한 로직
@@ -147,11 +147,11 @@ public class InAppWebViewClientCompat extends WebViewClientCompat {
                 webView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
             }
             //return  값을 반드시 true로 해야 합니다.
-            return false;
+            return true;
         }
 
         //return  값을 반드시 false로 해야 합니다.
-        return true;
+        return false;
   }
 
   private void allowShouldOverrideUrlLoading(WebView webView, String url,
