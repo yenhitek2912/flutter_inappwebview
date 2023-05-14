@@ -34,6 +34,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import java.net.URISyntaxException;
+
 public class FlutterWebView implements PlatformWebView {
 
   static final String LOG_TAG = "IAWFlutterWebView";
