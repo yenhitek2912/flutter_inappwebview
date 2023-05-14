@@ -136,7 +136,7 @@ public class InAppWebViewClientCompat extends WebViewClientCompat {
                 }
             }
             //return  값을 반드시 true로 해야 합니다.
-            return true;
+            return false;
 
         } else if (url.startsWith("https://play.google.com/store/apps/details?id=") || url.startsWith("market://details?id=")) {
             //표준창 내 앱설치하기 버튼 클릭 시 PlayStore 앱으로 연결하기 위한 로직
@@ -147,11 +147,11 @@ public class InAppWebViewClientCompat extends WebViewClientCompat {
                 webView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
             }
             //return  값을 반드시 true로 해야 합니다.
-            return true;
+            return false;
         }
 
         //return  값을 반드시 false로 해야 합니다.
-        return false;
+        return true;
   }
 
   private void allowShouldOverrideUrlLoading(WebView webView, String url,
