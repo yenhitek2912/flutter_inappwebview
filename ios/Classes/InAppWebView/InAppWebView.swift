@@ -1740,8 +1740,8 @@ public class InAppWebView: WKWebView, UIScrollViewDelegate, WKUIDelegate,
             //일반 웹 페이지 링크 처리(PolicyAllow)
             decisionHandler(.allow)
             return;
-        }
     }
+
 
     public func webView(_ webView: WKWebView,
                  decidePolicyFor navigationResponse: WKNavigationResponse,
