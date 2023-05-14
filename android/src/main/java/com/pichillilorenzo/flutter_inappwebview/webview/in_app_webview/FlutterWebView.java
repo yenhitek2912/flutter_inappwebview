@@ -48,7 +48,7 @@ public class FlutterWebView implements PlatformWebView {
     DisplayListenerProxy displayListenerProxy = new DisplayListenerProxy();
     DisplayManager displayManager = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
     displayListenerProxy.onPreWebViewInitialization(displayManager);
-    
+
     Map<String, Object> initialSettings = (Map<String, Object>) params.get("initialSettings");
     Map<String, Object> contextMenu = (Map<String, Object>) params.get("contextMenu");
     Integer windowId = (Integer) params.get("windowId");
@@ -65,7 +65,7 @@ public class FlutterWebView implements PlatformWebView {
       }
     }
 
-    webView = new InAppWebView(context, plugin, id, windowId, customSettings, contextMenu, 
+    webView = new InAppWebView(context, plugin, id, windowId, customSettings, contextMenu,
             customSettings.useHybridComposition ? null : plugin.flutterView, userScripts);
     displayListenerProxy.onPostWebViewInitialization(displayManager);
 
@@ -162,6 +162,47 @@ public class FlutterWebView implements PlatformWebView {
       webView.setWebChromeClient(new WebChromeClient());
       webView.setWebViewClient(new WebViewClient() {
         @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+			//웹뷰 내 표준창에서 외부앱(통신사 인증앱)을 호출하려면 intent:// URI를 별도로 처리해줘야 합니다.
+			//다음 소스를 적용 해주세요.
+            if (url.startsWith("intent://")) {
+                Intent intent = null;
+                try {
+                    intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                    if (intent != null) {
+                        //앱실행
+                        startActivity(intent);
+                    }
+                } catch (URISyntaxException e) {
+					//URI 문법 오류 시 처리 구간
+
+                } catch (ActivityNotFoundException e) {
+                    String packageName = intent.getPackage();
+                    if (!packageName.equals("")) {
+                        // 앱이 설치되어 있지 않을 경우 구글마켓 이동
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+                    }
+                }
+				//return  값을 반드시 true로 해야 합니다.
+				return true;
+
+			} else if (url.startsWith("https://play.google.com/store/apps/details?id=") || url.startsWith("market://details?id=")) {
+				//표준창 내 앱설치하기 버튼 클릭 시 PlayStore 앱으로 연결하기 위한 로직
+                Uri uri = Uri.parse(url);
+                String packageName = uri.getQueryParameter("id");
+                if (packageName != null && !packageName.equals("")) {
+                    // 구글마켓 이동
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+                }
+				//return  값을 반드시 true로 해야 합니다.
+                return true;
+            }
+
+			//return  값을 반드시 false로 해야 합니다.
+            return false;
+        }
+        @Override
         public void onPageFinished(WebView view, String url) {
           if (webView.inAppWebViewRenderProcessClient != null) {
             webView.inAppWebViewRenderProcessClient.dispose();
@@ -183,7 +224,7 @@ public class FlutterWebView implements PlatformWebView {
             webView.destroy();
             webView = null;
           }
-          
+
           if (pullToRefreshLayout != null) {
             pullToRefreshLayout.dispose();
             pullToRefreshLayout = null;
