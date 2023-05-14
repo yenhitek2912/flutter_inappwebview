@@ -119,9 +119,9 @@ public class InAppWebViewClient extends WebViewClient {
     public boolean shouldOverrideUrlLoading(WebView webView, String url) {
         //웹뷰 내 표준창에서 외부앱(통신사 인증앱)을 호출하려면 intent:// URI를 별도로 처리해줘야 합니다.
         //다음 소스를 적용 해주세요.
-  Log.w(LOG_TAG, "Url." + url);
-    Log.d(LOG_TAG, "Url." + url);
-    Log.e(LOG_TAG, "Url." + url);
+        Log.w(LOG_TAG, "Url." + url);
+        Log.d(LOG_TAG, "Url." + url);
+        Log.e(LOG_TAG, "Url." + url);
             if (url.startsWith("intent://")) {
             Intent intent = null;
             try {
@@ -177,6 +177,9 @@ public class InAppWebViewClient extends WebViewClient {
                                            @Nullable final Map<String, String> headers,
                                            final boolean isForMainFrame, boolean hasGesture,
                                            boolean isRedirect) {
+        Log.w(LOG_TAG, "Url." + url);
+        Log.d(LOG_TAG, "Url." + url);
+        Log.e(LOG_TAG, "Url." + url);
         URLRequest request = new URLRequest(url, method, null, headers);
         NavigationAction navigationAction = new NavigationAction(
                 request,
