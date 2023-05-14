@@ -79,9 +79,9 @@ public class InAppWebViewClient extends WebViewClient {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            Log.w(LOG_TAG, "Url." + url);
-    Log.d(LOG_TAG, "Url." + url);
-    Log.e(LOG_TAG, "Url." + url);
+            Log.w(LOG_TAG, "Url." + request.getUrl().toString());
+    Log.d(LOG_TAG, "Url." + request.getUrl().toString());
+    Log.e(LOG_TAG, "Url." + request.getUrl().toString());
 
         InAppWebView webView = (InAppWebView) view;
         if (webView.customSettings.useShouldOverrideUrlLoading) {
